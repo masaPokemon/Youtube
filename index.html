@@ -26,6 +26,7 @@ curl_close($ch);  //リソースを閉じ、システムリソースを解放
 mb_language("Japanese");
 $html_source = mb_convert_encoding($output, "UTF-8", "auto");?>
 <body>
+  
   <input id="url" type="text">
   <button id="send">送信</button>
   <script src="js/jquery.min.js"></script>
