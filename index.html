@@ -5,7 +5,26 @@
   <meta charset="UTF-8">
   <title>Hello!</title>
 </head>
+<?php
 
+$URL = "https://www.yahoo.co.jp"; //取得したいサイトのURL
+
+$ch = curl_init();
+
+//ここからオプション
+curl_setopt($ch, CURLOPT_URL, $URL);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //証明書検証しない
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  //レスポンスを表示するか
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);  //"Location: " ヘッダの内容をたどる
+curl_setopt($ch, CURLOPT_MAXREDIRS, 10);  //"Location: " ヘッダの内容をたどる深さ
+//ここまでオプション
+
+$output = curl_exec($ch) or die('error ' . curl_error($ch));   //cURL セッションを実行する
+curl_close($ch);  //リソースを閉じ、システムリソースを解放
+
+//日本語のための文字コード設定など
+mb_language("Japanese");
+$html_source = mb_convert_encoding($output, "UTF-8", "auto");?>
 <body>
   <input id="url" type="text">
   <button id="send">送信</button>
