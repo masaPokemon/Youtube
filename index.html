@@ -3,38 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>観覧履歴の表示</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin: 5px 0;
-        }
-    </style>
+    <title>観覧履歴</title>
 </head>
 <body>
-
     <h1>観覧履歴</h1>
-    <ul id="historyList"></ul>
+    <ul id="history-list"></ul>
 
     <script>
-        // ローカルストレージから履歴を取得
-        const history = JSON.parse(localStorage.getItem('viewingHistory')) || [];
+        function getHistory() {
+            return JSON.parse(localStorage.getItem('viewHistory')) || [];
+        }
 
-        // 履歴をリストに表示
-        const historyList = document.getElementById('historyList');
-        history.forEach(url => {
-            const listItem = document.createElement('li');
-            listItem.textContent = url;
-            historyList.appendChild(listItem);
-        });
+        function saveHistory(url) {
+            const history = getHistory();
+            if (!history.includes(url)) {
+                history.push(url);
+                localStorage.setItem('viewHistory', JSON.stringify(history));
+            }
+        }
+
+        function displayHistory() {
+            const historyList = document.getElementById('history-list');
+            const history = getHistory();
+            historyList.innerHTML = '';
+            history.forEach(url => {
+                const listItem = document.createElement('li');
+                listItem.textContent = url;
+                historyList.appendChild(listItem);
+            });
+        }
+
+        window.onload = function() {
+            const currentUrl = window.location.href;
+            saveHistory(currentUrl);
+            displayHistory();
+        };
     </script>
-
 </body>
 </html>
