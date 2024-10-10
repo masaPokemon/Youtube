@@ -2,43 +2,11 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>観覧履歴</title>
 </head>
 <body>
     <h1>観覧履歴</h1>
-    <ul id="history-list"></ul>
-
-    <script>
-        function getHistory() {
-            return JSON.parse(localStorage.getItem('viewHistory')) || [];
-        }
-
-        function saveHistory(url) {
-            const history = getHistory();
-            if (!history.includes(url)) {
-                history.push(url);
-                localStorage.setItem('viewHistory', JSON.stringify(history));
-            }
-        }
-
-        function displayHistory() {
-            const historyList = document.getElementById('history-list');
-            const history = getHistory();
-            historyList.innerHTML = '';
-            history.forEach(url => {
-                const listItem = document.createElement('li');
-                listItem.textContent = url;
-                historyList.appendChild(listItem);
-            });
-        }
-
-        window.onload = function() {
-            const currentUrl = window.location.href;
-            saveHistory(currentUrl);
-            displayHistory();
-        };
-    </script>
+    <ul id="historyList"></ul>
+    <script src="script.js"></script>
 </body>
 </html>
-s
