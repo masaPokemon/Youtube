@@ -1,1 +1,34 @@
-<iframe src="https://pokemon-card.com" width="100%" height="500px"></iframe>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>History API Sample</title>
+    </head>
+    <body>
+        <label for='name'>Name</label>
+        <input type='text' id='name' value='' />
+        <input type='button' id='pushButton' value='pushState' />
+        <hr />
+        <input type='button' id='replaceButton' value='replaceState' />
+        <script>
+            document.getElementById('pushButton').addEventListener('click', function() {
+                var name = document.getElementById('name').value;
+                window.history.pushState({name : name}, null, './history-api.html');
+            });
+
+            document.getElementById('replaceButton').addEventListener('click', function() {
+                var name = document.getElementById('name').value;
+                window.history.replaceState({name : name}, null, './history-api.html');
+            });
+
+            window.addEventListener('popstate', function(e) {
+                var state = e.state;
+                if (state) {
+                    document.getElementById('name').value = state.name;
+                    alert(state.name);
+                } else {
+                    document.getElementById('name').value = '';
+                }
+            });
+        </script>
+    </body>
+</html>
