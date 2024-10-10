@@ -1,48 +1,7 @@
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-  <meta charset="utf-8">
-  <title>mebeeサンプル</title>
-  <!-- MDB -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.2.0/mdb.min.css" rel="stylesheet" />
-</head>
-
-<body>
-
-  <div class="container text-center w-50" style="margin-top:150px">
-
-    <h2><span class="badge badge-primary">履歴数</span></h2>
-
-    <button id="btn" type="button" class="btn btn-warning">
-      確認
-    </button>
-
-  </div>
-
-  <script>
-
-    function hoge() {
-
-      // 表示用の要素を取得
-      let elm = document.getElementsByClassName("badge")[0]
-
-      let result = history.length
-
-      elm.textContent = result
-
-    }
-
-    // ボタンを取得
-    let elmbtn = document.getElementById('btn')
-
-    // クリックイベントを登録
-    elmbtn.onclick = function () {
-      hoge()
-    }
-
-
-  </script>
-</body>
-
-</html>
+<button onclick="myFunction()">Go Back</button>
+    
+<script>
+function myFunction() {
+  window.history();
+  }
+</script>
