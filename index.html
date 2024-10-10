@@ -3,28 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>観覧履歴</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>観覧履歴の表示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
 </head>
 <body>
+
     <h1>観覧履歴</h1>
-    <ul id="recent-views"></ul>
+    <ul id="historyList"></ul>
 
     <script>
-        $(document).ready(function() {
-            var recent_views = JSON.parse(localStorage.getItem('ounziw_recent_views')) || [];
-            var $list = $('#recent-views');
+        // ローカルストレージから履歴を取得
+        const history = JSON.parse(localStorage.getItem('viewingHistory')) || [];
 
-            if (recent_views.length > 0) {
-                recent_views.forEach(function(view) {
-                    var $item = $('<li></li>');
-                    $item.append($('<a></a>').attr('href', view.url).text(view.headertitle));
-                    $list.append($item);
-                });
-            } else {
-                $list.append('<li>履歴はありません。</li>');
-            }
+        // 履歴をリストに表示
+        const historyList = document.getElementById('historyList');
+        history.forEach(url => {
+            const listItem = document.createElement('li');
+            listItem.textContent = url;
+            historyList.appendChild(listItem);
         });
     </script>
+
 </body>
 </html>
