@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>観覧履歴</title>
+    <script>
+        function getViews() {
+            alert("You've accessed " + history.length + " web pages in this session.");
+        }
+    </script>
+ 
+    <button type="button" onclick="getViews();">Get Views Count</button>
+
 </head>
-<body>
-    <h1>観覧履歴</h1>
-    <ul id="historyList"></ul>
-    <script src="script.js"></script>
-</body>
 </html>
