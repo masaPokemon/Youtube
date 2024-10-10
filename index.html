@@ -1,7 +1,30 @@
-<button onclick="myFunction()">Go Back</button>
-    
-<script>
-function myFunction() {
-  window.history();
-  }
-</script>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>観覧履歴</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>観覧履歴</h1>
+    <ul id="recent-views"></ul>
+
+    <script>
+        $(document).ready(function() {
+            var recent_views = JSON.parse(localStorage.getItem('ounziw_recent_views')) || [];
+            var $list = $('#recent-views');
+
+            if (recent_views.length > 0) {
+                recent_views.forEach(function(view) {
+                    var $item = $('<li></li>');
+                    $item.append($('<a></a>').attr('href', view.url).text(view.headertitle));
+                    $list.append($item);
+                });
+            } else {
+                $list.append('<li>履歴はありません。</li>');
+            }
+        });
+    </script>
+</body>
+</html>
