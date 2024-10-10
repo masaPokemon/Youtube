@@ -5,6 +5,4 @@ function onGot(historyItems) {
   }
 }
 
-function test() {
-    browser.history.search({ text: "" }).then(onGot);
-}
+browser.history.search({ text: "" }).then(onGot);
