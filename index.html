@@ -1,13 +1,69 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <script>
-        function getViews() {
-            alert(history);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画面キャプチャ配信</title>
+    <style>
+        video {
+            width: 100%;
+            height: auto;
+            border: 1px solid black;
         }
-    </script>
- 
-    <button type="button" onclick="getViews();">Get Views Count</button>
-
+    </style>
 </head>
+<body>
+    <h1>画面キャプチャ配信</h1>
+    <button id="shareScreen">画面を共有</button>
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+
+    <script>
+        const socket = new WebSocket('wss://signaling-server-vl27.onrender.com'); // 後で公開するURLに変更します
+        let localStream;
+        let peerConnection;
+
+        const config = {
+            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] // STUNサーバー
+        };
+
+        document.getElementById('shareScreen').onclick = async () => {
+            try {
+                localStream = await navigator.mediaDevices.getDisplayMedia({
+                    video: true,
+                    audio: true
+                });
+                document.getElementById('localVideo').srcObject = localStream;
+
+                peerConnection = new RTCPeerConnection(config);
+                localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+                peerConnection.onicecandidate = event => {
+                    if (event.candidate) {
+                        socket.send(JSON.stringify({ 'candidate': event.candidate }));
+                    }
+                };
+
+                peerConnection.ontrack = event => {
+                    document.getElementById('remoteVideo').srcObject = event.streams[0];
+                };
+
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+                socket.send(JSON.stringify({ 'offer': offer }));
+            } catch (err) {
+                console.error("エラー: " + err);
+            }
+        };
+
+        socket.onmessage = async message => {
+            const data = JSON.parse(message.data);
+            if (data.answer) {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+            } else if (data.candidate) {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+            }
+        };
+    </script>
+</body>
 </html>
