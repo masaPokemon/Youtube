@@ -14,7 +14,7 @@
             try {
                 // ルーターのログが取得できるURLにアクセスする例
                 // ルーターのログAPIやログファイルのパスにアクセスすることが必要です
-                let response = await fetch('http://133.54.5.25/logs');
+                let response = await fetch('http://133.54.5.25');
                 
                 if (response.ok) {
                     let logs = await response.text();
