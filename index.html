@@ -3,33 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ルーターのログ表示</title>
+    <title>IPアドレス検索</title>
 </head>
 <body>
-    <h1>ルーターのログ</h1>
-    <div id="log"></div>
+    <h1>IPアドレス検索履歴</h1>
+    <button id="fetch-ip">IPアドレスを取得</button>
+    <ul id="history"></ul>
 
-    <script>
-        async function getRouterLogs() {
-            try {
-                // ルーターのログが取得できるURLにアクセスする例
-                // ルーターのログAPIやログファイルのパスにアクセスすることが必要です
-                let response = await fetch('http://133.54.5.25');
-                
-                if (response.ok) {
-                    let logs = await response.text();
-                    document.getElementById('log').innerText = logs;
-                } else {
-                    document.getElementById('log').innerText = 'ログの取得に失敗しました。';
-                }
-            } catch (error) {
-                console.error('エラー:', error);
-                document.getElementById('log').innerText = 'エラーが発生しました。';
-            }
-        }
-
-        // ページ読み込み時にログを取得
-        window.onload = getRouterLogs;
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
