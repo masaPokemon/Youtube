@@ -3,7 +3,36 @@
   <head>
     <title>Bubble Game</title>
     <meta charset="UTF-8" />
-    <script src="./main.js"></script>
   </head>
-
+  <body>
+	  <header></header>
+	  <main></main>
+	  <footer></footer>
+	  <script>
+		  final WebHistory history = webEngine.getHistory();
+      history.getEntries().addListener(new 
+        ListChangeListener<WebHistory.Entry>() {
+          @Override
+          public void onChanged(Change<? extends Entry> c) {
+            c.next();
+            for (Entry e : c.getRemoved()) {
+              comboBox.getItems().remove(e.getUrl());
+            }
+            for (Entry e : c.getAddedSubList()) {
+              comboBox.getItems().add(e.getUrl());
+            }
+          }
+        }
+      );
+         
+      comboBox.setPrefWidth(60);
+      comboBox.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent ev) {
+          int offset = comboBox.getSelectionModel().getSelectedIndex() - history.getCurrentIndex();
+          history.go(offset);
+        }
+      });
+	  </script>
+  </body>
 </html>
