@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wi-Fi 通信履歴</title>
+    <title>ルーター通信履歴</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -20,38 +24,56 @@
     </style>
 </head>
 <body>
-    <h1>Wi-Fi 通信履歴</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>日時</th>
-                <th>SSID</th>
-                <th>IPアドレス</th>
-                <th>データ量</th>
-            </tr>
-        </thead>
-        <tbody id="history">
-            <!-- 通信履歴データがここに挿入されます -->
-        </tbody>
-    </table>
 
-    <script>
-        // ここにサーバーからデータを取得するコードを追加します
-        fetch('/api/wifi-history')
-            .then(response => response.json())
-            .then(data => {
-                const historyTable = document.getElementById('history');
-                data.forEach(record => {
-                    const row = `<tr>
-                        <td>${record.date}</td>
-                        <td>${record.ssid}</td>
-                        <td>${record.ip}</td>
-                        <td>${record.dataAmount}</td>
-                    </tr>`;
-                    historyTable.innerHTML += row;
-                });
-            })
-            .catch(error => console.error('エラー:', error));
-    </script>
+<h1>ルーター通信履歴</h1>
+<table id="historyTable">
+    <thead>
+        <tr>
+            <th>日時</th>
+            <th>IPアドレス</th>
+            <th>通信プロトコル</th>
+            <th>データ量 (MB)</th>
+            <th>ステータス</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- データ行がここに挿入されます -->
+    </tbody>
+</table>
+
+<script>
+async function fetchRouterHistory() {
+    try {
+        const response = await fetch('http://10.195.0.1/history', {
+            method: 'GET',
+        });
+        
+        if (!response.ok) {
+            throw new Error('ネットワークエラーが発生しました');
+        }
+
+        const data = await response.json();
+        const tableBody = document.querySelector('#historyTable tbody');
+
+        data.history.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.date}</td>
+                <td>${item.ip}</td>
+                <td>${item.protocol}</td>
+                <td>${item.dataSize}</td>
+                <td>${item.status}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('エラー:', error);
+    }
+}
+
+// ページ読み込み時にデータを取得
+window.onload = fetchRouterHistory;
+</script>
+
 </body>
 </html>
