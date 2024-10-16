@@ -3,77 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ルーター通信履歴</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <title>ルーターのログ表示</title>
 </head>
 <body>
+    <h1>ルーターのログ</h1>
+    <div id="log"></div>
 
-<h1>ルーター通信履歴</h1>
-<table id="historyTable">
-    <thead>
-        <tr>
-            <th>日時</th>
-            <th>IPアドレス</th>
-            <th>通信プロトコル</th>
-            <th>データ量 (MB)</th>
-            <th>ステータス</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- データ行がここに挿入されます -->
-    </tbody>
-</table>
-
-<script>
-async function fetchRouterHistory() {
-    try {
-        const response = await fetch('http://10.195.0.1/history', {
-            method: 'GET',
-        });
-        
-        if (!response.ok) {
-            throw new Error('ネットワークエラーが発生しました');
+    <script>
+        async function getRouterLogs() {
+            try {
+                // ルーターのログが取得できるURLにアクセスする例
+                // ルーターのログAPIやログファイルのパスにアクセスすることが必要です
+                let response = await fetch('http://133.54.5.25/logs');
+                
+                if (response.ok) {
+                    let logs = await response.text();
+                    document.getElementById('log').innerText = logs;
+                } else {
+                    document.getElementById('log').innerText = 'ログの取得に失敗しました。';
+                }
+            } catch (error) {
+                console.error('エラー:', error);
+                document.getElementById('log').innerText = 'エラーが発生しました。';
+            }
         }
 
-        const data = await response.json();
-        const tableBody = document.querySelector('#historyTable tbody');
-
-        data.history.forEach(item => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${item.date}</td>
-                <td>${item.ip}</td>
-                <td>${item.protocol}</td>
-                <td>${item.dataSize}</td>
-                <td>${item.status}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-    } catch (error) {
-        console.error('エラー:', error);
-    }
-}
-
-// ページ読み込み時にデータを取得
-window.onload = fetchRouterHistory;
-</script>
-
+        // ページ読み込み時にログを取得
+        window.onload = getRouterLogs;
+    </script>
 </body>
 </html>
