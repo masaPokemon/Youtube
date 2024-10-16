@@ -1,69 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>画面キャプチャ配信</title>
-    <style>
-        video {
-            width: 100%;
-            height: auto;
-            border: 1px solid black;
-        }
-    </style>
-</head>
-<body>
-    <h1>画面キャプチャ配信</h1>
-    <button id="shareScreen">画面を共有</button>
-    <video id="localVideo" autoplay muted></video>
-    <video id="remoteVideo" autoplay></video>
-
-    <script>
-        const socket = new WebSocket('wss://signaling-server-vl27.onrender.com'); // 後で公開するURLに変更します
-        let localStream;
-        let peerConnection;
-
-        const config = {
-            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] // STUNサーバー
-        };
-
-        document.getElementById('shareScreen').onclick = async () => {
-            try {
-                localStream = await navigator.mediaDevices.getDisplayMedia({
-                    video: true,
-                    audio: true
-                });
-                document.getElementById('localVideo').srcObject = localStream;
-
-                peerConnection = new RTCPeerConnection(config);
-                localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-                peerConnection.onicecandidate = event => {
-                    if (event.candidate) {
-                        socket.send(JSON.stringify({ 'candidate': event.candidate }));
-                    }
-                };
-
-                peerConnection.ontrack = event => {
-                    document.getElementById('remoteVideo').srcObject = event.streams[0];
-                };
-
-                const offer = await peerConnection.createOffer();
-                await peerConnection.setLocalDescription(offer);
-                socket.send(JSON.stringify({ 'offer': offer }));
-            } catch (err) {
-                console.error("エラー: " + err);
-            }
-        };
-
-        socket.onmessage = async message => {
-            const data = JSON.parse(message.data);
-            if (data.answer) {
-                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
-            } else if (data.candidate) {
-                await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
-            }
-        };
-    </script>
-</body>
-</html>
+<body id=D onKeyDown=K=event.keyCode-38><script>function G(x){Z[x]==c&&(Z[x]=q?
+(P+=k++,0):-c,G(x+1),G(x+8),G(x-1),G(x-8),v++)}function Y(){i=I=96;if(e=++e%4)
+for(K?K+6?Z[a=h+K]|Z[a+B]?0:h=a:Z[h+(E=B%8?B*8:-B/8)]?0:B=E:0;K=k=i--;X[h]=2+t%
+5|0,X[h+B]=2+t/5|0,f=Z[8+h]+Z[8+h+B])X[i]=Z[i];else if(h+=8,r||f){r?r=0:X=[Z=X]
+for(Z[-5]=0;i--;B=8)Z[j=i-8]*!Z[i]&&(Z[i]=Z[j],Z[r=j]=0);if(!r)for(t=Math.
+random(h=3)*25;I--;q=v=0)if(c=Z[I],c>1)G(I),c=-c,r+=q=v>3,G(I);e=r?3:0}for(i=S=
+"";i<96;S+=i%8?"＿■●★▲＊□".charAt(c):"■<br>")c=X[i]|(Z[i]|=++i%8<2|i>88);
+D.innerHTML=S+P;Z[3]*!r||setTimeout(Y,99-P)}e=3;Y(f=X=Z=[r=h=K=P=0])</script>
